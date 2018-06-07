@@ -12,18 +12,7 @@ function saveBookmark(e){
   var siteName = document.getElementById('siteName').value;
   var siteUrl = document.getElementById('siteUrl').value;
 
-  //Regular expression for valid URL
-  var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
-  var regex = new RegExp(expression);
-
-  //Validate if Site Name or Site URL is empty
-  if(!siteName || !siteUrl){
-    alert('Please fill in the form')
-    return false;
-  }
-  //Validate if the URL is a valid URL
-  if(!siteUrl.match(regex)){
-    alert('Please enter a valid URL');
+  if(!validateForm(siteName, siteUrl)){
     return false;
   }
 
@@ -32,8 +21,6 @@ function saveBookmark(e){
     name : siteName,
     url : siteUrl
   }
-
-
 
   //save the bookmare object to local storage
   if(localStorage.getItem('bookmarks') === null){
@@ -52,6 +39,9 @@ function saveBookmark(e){
     //Re-set to localStorage
     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
   }
+
+  //Clear form after submission
+  document.getElementById('myForm').reset();
 
   //Display bookmarks after addition
   fetchBookmarks();
@@ -110,4 +100,22 @@ function fetchBookmarks(){
                                 + '</h3></div>';
   //  console.log(name);
   }
+}
+
+function validateForm(siteName, siteUrl){
+  //Regular expression for valid URL
+  var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+  var regex = new RegExp(expression);
+
+  //Validate if Site Name or Site URL is empty
+  if(!siteName || !siteUrl){
+    alert('Please fill in the form')
+    return false;
+  }
+  //Validate if the URL is a valid URL
+  if(!siteUrl.match(regex)){
+    alert('Please enter a valid URL');
+    return false;
+  }
+  return true;
 }
